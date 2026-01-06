@@ -58,15 +58,15 @@
     "instrument": true
   },
   "devDependencies": {
-    "@types/bluebird": "^3.5.3",
+    "@types/bluebird": "^3.5.42",
     "@types/debug": "0.0.29",
-    "@types/java": "^0.7.31",
-    "@types/lodash": "^4.14.64",
+    "@types/java": "^0.9.6",
+    "@types/lodash": "^4.17.21",
     "@types/node": "^7.0.29",
     "@types/mocha": "^2.2.41",
     "@types/should": "^8.3.0",
     "co-mocha": "^1.2.0",
-    "java": "^0.12.1",
+    "java": "^0.18.0",
     "mocha": "^10.2.0",
     "node-java-maven": "^0.1.2",
     "nyc": "^14.1.1",
@@ -77,13 +77,13 @@
     "typescript": "^3.7.3"
   },
   "dependencies": {
-    "bluebird": "^3.5.0",
-    "deasync": "^0.1.9",
+    "bluebird": "^3.7.2",
+    "deasync": "^0.1.31",
     "debug": "^2.6.8",
     "lodash": ">=4.17.21"
   },
   "peerDependencies": {
-    "java": "^0.12.1"
+    "java": "^0.18.0"
   },
   "optionalDependencies": {
     "node-java-maven": "^0.1.2"
