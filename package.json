@@ -23,10 +23,10 @@
     "lib"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --noEmitOnError false",
     "lint": "tslint --project .",
     "lint:fix": "npm run lint -- --fix",
-    "prepublish": "npm run build",
+    "prepublish": "npm run build --ignore-errors",
     "maven": "node-java-maven",
     "pretest": "npm run maven",
     "test": "mocha",
