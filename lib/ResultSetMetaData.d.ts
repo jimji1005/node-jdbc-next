@@ -4,11 +4,11 @@ export interface IResultSetMetaData {
     getColumnLabelSync(columnIndex: number): string;
     getColumnTypeSync(columnIndex: number): number;
 }
-export declare type IColumnType = {
+export type IColumnType = {
     index: number;
     name: string;
 };
-export declare type IColumnMetaData = {
+export type IColumnMetaData = {
     columnIndex: number;
     name: string;
     label: string;

@@ -1,11 +1,16 @@
-/// <reference types="node" />
-import * as Promise from 'bluebird';
-import * as j from 'java';
-import * as debug from 'debug';
-import { EventEmitter } from 'events';
-declare module 'java' {
+import * as Promise from "bluebird";
+import * as j from "java";
+import * as debug from "debug";
+import { EventEmitter } from "events";
+declare module "java" {
     interface NodeAPI {
         callStaticMethodAsync(className: string, methodName: string, ...args: any[]): Promise<any>;
+        callStaticMethodSync(className: string, methodName: string, ...args: any[]): any;
+        newInstanceSync(className: string, ...args: any[]): any;
+        isJvmCreated(): boolean;
+        getStaticFieldValue(className: string, fieldName: string): any;
+        classpath: string[];
+        options: string[];
     }
 }
 export declare class Java {

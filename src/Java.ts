@@ -1,92 +1,110 @@
-import * as Promise from 'bluebird'
-import * as j from 'java'
-import * as deasync from 'deasync'
-import * as debug from 'debug'
+import * as Promise from "bluebird";
+import * as j from "java";
+import * as deasync from "deasync";
+import * as debug from "debug";
 
-import { EventEmitter } from 'events'
+import { EventEmitter } from "events";
 
-declare module 'java' {
+declare module "java" {
   export interface NodeAPI {
-    callStaticMethodAsync (className: string, methodName: string, ...args: any[]): Promise<any>
+    callStaticMethodAsync(
+      className: string,
+      methodName: string,
+      ...args: any[]
+    ): Promise<any>;
+    callStaticMethodSync(
+      className: string,
+      methodName: string,
+      ...args: any[]
+    ): any;
+    newInstanceSync(className: string, ...args: any[]): any;
+    isJvmCreated(): boolean;
+    getStaticFieldValue(className: string, fieldName: string): any;
+    classpath: string[];
+    options: string[];
   }
 }
 
-const java: j.NodeAPI = Promise.promisifyAll(j) as j.NodeAPI
+const java: j.NodeAPI = Promise.promisifyAll(j) as unknown as j.NodeAPI;
 
-let instance: Java = null
+let instance: Java = null;
 
 export class Java {
-  public java: j.NodeAPI
-  public events: EventEmitter
+  public java: j.NodeAPI;
+  public events: EventEmitter;
 
-  public mavenClasspath: string[] = []
-  public mavenDependencies: {} = {}
+  public mavenClasspath: string[] = [];
+  public mavenDependencies: {} = {};
 
-  protected _debug: debug.IDebugger = debug('jdbc:Java')
+  protected _debug: debug.IDebugger = debug("jdbc:Java");
 
-  constructor (useXrs: boolean = true, useMaven: boolean = true) {
+  constructor(useXrs: boolean = true, useMaven: boolean = true) {
     if (instance) {
-      return instance
+      return instance;
     }
 
-    instance = this
+    instance = this;
 
-    this.java = java
-    this.events = new EventEmitter()
+    this.java = java;
+    this.events = new EventEmitter();
 
     if (useXrs) {
-      this._debug('use Xrs')
-      this.addOption('-Xrs')
+      this._debug("use Xrs");
+      this.addOption("-Xrs");
     }
 
     if (useMaven) {
       try {
-        let done: boolean = false
-        const mvn = require('node-java-maven')
+        let done: boolean = false;
+        const mvn = require("node-java-maven");
         mvn((err: Error, deps) => {
-          if (err) throw err
-          this.mavenClasspath = deps.classpath
-          this.mavenDependencies = deps.dependencies
-          done = true
-        })
-        deasync.loopWhile(() => !done)
-        this.addClasspath(this.mavenClasspath)
+          if (err) throw err;
+          this.mavenClasspath = deps.classpath;
+          this.mavenDependencies = deps.dependencies;
+          done = true;
+        });
+        deasync.loopWhile(() => !done);
+        this.addClasspath(this.mavenClasspath);
       } catch (err) {
-        if (err.code !== 'MODULE_NOT_FOUND') {
-          throw err
+        if (err.code !== "MODULE_NOT_FOUND") {
+          throw err;
         } else {
-          this._debug('node-jave-maven not found. useMaven is ignored.')
+          this._debug("node-jave-maven not found. useMaven is ignored.");
         }
       }
     }
 
-    return instance
+    return instance;
   }
 
-  static getInstance (): Java {
+  static getInstance(): Java {
     if (!instance) {
-      instance = new Java()
+      instance = new Java();
     }
-    return instance
+    return instance;
   }
 
-  isJvmCreated (): boolean {
-    return this.java.isJvmCreated()
+  isJvmCreated(): boolean {
+    return this.java.isJvmCreated();
   }
 
-  addOption (option: string) {
+  addOption(option: string) {
     if (this.isJvmCreated() === false) {
-      this.java.options.push(option)
+      this.java.options.push(option);
     } else {
-      throw new Error(`Can not add option '${option}', because JVM instance is already created`)
+      throw new Error(
+        `Can not add option '${option}', because JVM instance is already created`,
+      );
     }
   }
 
-  addClasspath (dependencies: string[]) {
+  addClasspath(dependencies: string[]) {
     if (this.isJvmCreated() === false) {
-      this.java.classpath.push.apply(this.java.classpath, dependencies)
+      this.java.classpath.push.apply(this.java.classpath, dependencies);
     } else {
-      throw new Error(`Can not add classpath dependencies, because JVM instance is already created.\n\nDependencies: ${dependencies}`)
+      throw new Error(
+        `Can not add classpath dependencies, because JVM instance is already created.\n\nDependencies: ${dependencies}`,
+      );
     }
   }
 }

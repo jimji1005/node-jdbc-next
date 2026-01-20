@@ -15,7 +15,7 @@ export interface IResultSet {
     getTimestampSync(columnLabel: string): any;
     getObjectSync(columnLabel: string): any;
 }
-export declare type IFetchResult = {};
+export type IFetchResult = {};
 export declare class ResultSet {
     private resultSet;
     constructor(resultSet: IResultSet);
