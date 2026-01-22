@@ -1,6 +1,6 @@
-import * as Promise from 'bluebird';
-import { Connection } from './Connection';
-import { Statement } from './Statement';
+import * as Promise from "bluebird";
+import { Connection } from "./Connection";
+import { Statement } from "./Statement";
 export interface IJDBCConfig {
     className: string;
     url: string;
@@ -14,6 +14,7 @@ export declare class JDBC {
     constructor(config: IJDBCConfig);
     getConnection(connectIfClosed?: boolean): Promise<Connection>;
     createStatement(connectIfClosed?: boolean): Promise<Statement>;
+    closeConnection(): Promise<void>;
     private validateConfig;
     private classForName;
     private registerDriver;
